@@ -26,10 +26,10 @@ const server = http.createServer((req, res) => {
             email: 'johndoe@',
         })
 
-        return res.end('Criação de um usuário');
+        return res.writeHead(201).end();
     }
 
-    return res.end('Rota de escape');
+    return res.writeHead(404).end();
 
 });
 
