@@ -1,4 +1,10 @@
-import { Readable } from "node:stream";
+//Readable → lê dados (ex: arquivo sendo lido)
+//Writable → escreve dados (ex: salvar num arquivo)
+//Duplex → lê e escreve (ex: socket de rede)
+//Transform → lê, processa e escreve (ex: compactar, criptografar, converter)
+
+
+import { Readable, Writable, Transform} from "node:stream";
 
 class OneToHundredStream extends Readable {
   index = 1;
@@ -18,8 +24,21 @@ class OneToHundredStream extends Readable {
   }
 }
 
-class MultiplyByTenStream extends Writeble {
-  
+class InverseNumberStream extends Transform {
+  _transform(chunk, encoding, callback) {
+    const transformed = Number(chunk.toString()) * -1;
+
+    callback(null, Buffer.from(String(transformed)));
+  }
 }
 
-new OneToHundredStream().pipe(process.stdout);
+class MultiplyByTenStream extends Writable {
+  _write(chunk, encoding, callback) {
+    console.log(Number(chunk.toString()) * 10)
+    callback();
+  }
+}
+
+new OneToHundredStream()
+.pipe(new InverseNumberStream())
+.pipe(new MultiplyByTenStream());
