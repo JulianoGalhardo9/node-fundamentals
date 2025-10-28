@@ -1,4 +1,4 @@
-import http from 'node:http';
+import http from "node:http";
 
 // GET -> Buscar uma informação
 // POST -> Criar uma informação
@@ -6,31 +6,42 @@ import http from 'node:http';
 // DELETE -> Deletar uma informação
 // PATCH -> Atualizar uma informação específica
 
-const users = []
+const users = [];
 
-const server = http.createServer((req, res) => {
-    const { method, url } = req
+const server = http.createServer(async (req, res) => {
+  const { method, url } = req;
 
-    if (method === 'GET' && url === '/users') {
+  const buffers = [];
 
-        return res
-            .setHeader('Content-type', 'aplication/json')
-            .end(JSON.stringify(users));
-    }
+  for await (const chunk of req) {
+    buffers.push(chunk);
+  }
 
-    if (method === 'POST' && url === '/users') {
+  try {
+    req.body = JSON.parse(Buffer.concat(buffers).toString());
+  } catch {
+    req.body = null;
+  }
 
-        users.push({
-            id: 1,
-            name: 'John Doe',
-            email: 'johndoe@',
-        })
+  if (method === "GET" && url === "/users") {
+    return res
+      .setHeader("Content-type", "aplication/json")
+      .end(JSON.stringify(users));
+  }
 
-        return res.writeHead(201).end();
-    }
+  if (method === "POST" && url === "/users") {
+    const { name, email } = req.body;
 
-    return res.writeHead(404).end();
+    users.push({
+      id: 1,
+      name,
+      email,
+    });
 
+    return res.writeHead(201).end();
+  }
+
+  return res.writeHead(404).end();
 });
 
-server.listen(3333)
+server.listen(3333);
