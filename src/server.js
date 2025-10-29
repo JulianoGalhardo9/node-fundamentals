@@ -1,6 +1,9 @@
 import http from "node:http";
+import { randomUUID } from 'node:crypto'
 import { Database } from "./database.js";
 import { json } from "../src/middlewares/json.js";
+
+// UUID => Universally Unique Identifier
 
 // GET -> Buscar uma informação
 // POST -> Criar uma informação
@@ -26,7 +29,7 @@ const server = http.createServer(async (req, res) => {
     const { name, email } = req.body;
 
     const user = {
-      id: 1,
+      id: randomUUID(),
       name,
       email,
     };
