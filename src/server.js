@@ -27,7 +27,7 @@ if (route) {
 
     const routeParams = req.url.match(route.path);
 
-    console.log(routeParams);
+    req.params = { ...routeParams.groups };
 
     return route.handle(req, res);
 }
