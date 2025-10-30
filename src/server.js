@@ -1,6 +1,7 @@
 import http from "node:http";
 import { json } from "../src/middlewares/json.js";
 import { routes } from "./routes.js";
+import { extractQueryParams } from "./utils/extract-query-params.js";
 
 // Query parameters => vêm depois do ? na URL e servem pra filtrar ou buscar dados.
 // Route parameters => fazem parte da rota e servem pra identificar um item específico.
@@ -27,7 +28,10 @@ if (route) {
 
     const routeParams = req.url.match(route.path);
 
-    req.params = { ...routeParams.groups };
+    const { query, ...params } = routeParams.groups;
+
+    req.params = params;
+    req.query = query ? extractQueryParams(query) : {};
 
     return route.handle(req, res);
 }
