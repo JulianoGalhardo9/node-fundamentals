@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { Database } from "./database.js";
+import path from "node:path";
 
 const dataBase = new Database();
 
@@ -30,4 +31,10 @@ export const routes = [
       return res.writeHead(201).end();
     },
   },
+  {
+    method: "DELETE",
+    path: "/users/",
+    handle: (req, res) => {
+      const { id } = req.body;}
+  }
 ];

@@ -2,6 +2,10 @@ import http from "node:http";
 import { json } from "../src/middlewares/json.js";
 import { routes } from "./routes.js";
 
+// Query parameters => vêm depois do ? na URL e servem pra filtrar ou buscar dados.
+// Route parameters => fazem parte da rota e servem pra identificar um item específico.
+// Request body => fica no corpo da requisição e serve pra enviar dados (criar ou editar).
+
 // UUID => Universally Unique Identifier
 
 // GET -> Buscar uma informação
